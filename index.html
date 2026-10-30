@@ -1,12 +1,10 @@
-<!DOCTYPE html>
-
-<html lang="en" style=""><head>
-<meta charset="utf-8"/>
-<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<!DOCTYPE html><html lang="en" style=""><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
 <title>Brenda &amp; José - Wedding Invitation</title>
 <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
-<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
-<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&amp;family=Cormorant+Garamond:wght@300;400;600&amp;family=Great+Vibes&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&amp;family=Cormorant+Garamond:wght@300;400;600&amp;family=Great+Vibes&amp;display=swap" rel="stylesheet">
 <script id="tailwind-config">
         tailwind.config = {
             darkMode: "class",
@@ -190,20 +188,7 @@
         }
     </style>
 <script>
-        function openDeepLink(e, appUrl, webUrl) {
-            if(e) e.preventDefault();
-            const start = Date.now();
-            window.location.href = appUrl;
-            
-            setTimeout(() => {
-                if (Date.now() - start < 1500) {
-                    window.open(webUrl, '_blank', 'noopener,noreferrer');
-                }
-            }, 1000);
-        }
-
-        function downloadICS(e) {
-            if(e) e.preventDefault();
+        function downloadICS() {
             const icsData = `BEGIN:VCALENDAR
 VERSION:2.0
 PRODID:-//Brenda & Jose//Wedding//EN
@@ -217,23 +202,13 @@ LOCATION:Darwin Tortugas
 DESCRIPTION:Ceremonia y Fiesta
 END:VEVENT
 END:VCALENDAR`;
-            
-            const isWebview = (navigator.userAgent.includes('wv') || (navigator.userAgent.includes('iPhone') && !navigator.userAgent.includes('Safari')) || navigator.userAgent.includes('Instagram'));
-            
-            if (isWebview) {
-                alert("Si la descarga no inicia en esta aplicación, por favor abre este enlace en tu navegador predeterminado (Chrome/Safari) para guardar el evento.");
-            }
-
             const blob = new Blob([icsData], { type: 'text/calendar;charset=utf-8' });
-            const url = window.URL.createObjectURL(blob);
             const link = document.createElement('a');
-            link.href = url;
+            link.href = window.URL.createObjectURL(blob);
             link.setAttribute('download', 'boda-brenda-y-jose.ics');
-            link.setAttribute('target', '_blank');
             document.body.appendChild(link);
             link.click();
             document.body.removeChild(link);
-            setTimeout(() => window.URL.revokeObjectURL(url), 100);
         }
 
         function copyToClipboard(text, buttonElement) {
@@ -288,24 +263,21 @@ END:VCALENDAR`;
             document.getElementById('menu-overlay').classList.toggle('open');
         }
 
-        // Countdown animation
-        setInterval(() => {
-            const secEl = document.getElementById('cd-seconds');
-            if (secEl) {
-                let sec = parseInt(secEl.innerText);
-                sec = sec > 0 ? sec - 1 : 59;
-                secEl.innerText = sec.toString().padStart(2, '0');
-                
-                if (sec === 59) {
-                    const minEl = document.getElementById('cd-minutes');
-                    if(minEl) {
-                        let min = parseInt(minEl.innerText);
-                        min = min > 0 ? min - 1 : 59;
-                        minEl.innerText = min.toString().padStart(2, '0');
-                    }
-                }
-            }
-        }, 1000);
+        // Cuenta regresiva real: 22/11/2026 18:00 (hora de Buenos Aires, UTC-3)
+        const EVENT_DATE = new Date('2026-11-22T18:00:00-03:00');
+        function updateCountdown() {
+            let ms = EVENT_DATE - new Date();
+            if (ms < 0) ms = 0;
+            const d = Math.floor(ms / 86400000);
+            const h = Math.floor(ms % 86400000 / 3600000);
+            const m = Math.floor(ms % 3600000 / 60000);
+            const s = Math.floor(ms % 60000 / 1000);
+            const set = (id, v) => { const el = document.getElementById(id); if (el) el.innerText = String(v).padStart(2, '0'); };
+            set('cd-days', d); set('cd-hours', h); set('cd-minutes', m); set('cd-seconds', s);
+        }
+        document.addEventListener('DOMContentLoaded', updateCountdown);
+        updateCountdown();
+        setInterval(updateCountdown, 1000);
 
         // Canvas Scratch Logic
         document.addEventListener('DOMContentLoaded', () => {
@@ -511,7 +483,7 @@ END:VCALENDAR`;
 <!-- Cinematic Photo Section -->
 <section class="w-full h-[80vh] relative backdrop-blur-[4px]" id="nos-casamos">
 <div class="w-full h-full absolute inset-0 backdrop-blur-[4px] z-10"></div>
-<img class="w-full h-full object-cover absolute inset-0 z-0" data-alt="A cinematic full-bleed image of a couple standing on a balcony overlooking a stunning mountainous landscape with a lake, bright sunny day, high-end editorial wedding photography style, natural lighting, deep contrast." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCsgHxrOesigLKGX6CNW3OIBfES-bCkT7Ntn7Ynoht5eHRYBh42oWPBfs1YFWXnyVgtETRGf9MKM10jfG0O0zRaBu3WunNbO_0ialtQ1eOHQ7V40nZBWV_sXvfmX1mwtaNvFDHwAynzNLMPzsnGWW7dcfOJTMSbv1e8Y65qbZqLMwxEcCPIBqy08ttBQrpxquZMYhVER8vWkHei9KAb90oZNUncGPaufwyH2WCfMiZ9zaGWXKxQV3iauW_bS7oggU8t6g"/>
+<img class="w-full h-full object-cover absolute inset-0 z-0" data-alt="A cinematic full-bleed image of a couple standing on a balcony overlooking a stunning mountainous landscape with a lake, bright sunny day, high-end editorial wedding photography style, natural lighting, deep contrast." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCsgHxrOesigLKGX6CNW3OIBfES-bCkT7Ntn7Ynoht5eHRYBh42oWPBfs1YFWXnyVgtETRGf9MKM10jfG0O0zRaBu3WunNbO_0ialtQ1eOHQ7V40nZBWV_sXvfmX1mwtaNvFDHwAynzNLMPzsnGWW7dcfOJTMSbv1e8Y65qbZqLMwxEcCPIBqy08ttBQrpxquZMYhVER8vWkHei9KAb90oZNUncGPaufwyH2WCfMiZ9zaGWXKxQV3iauW_bS7oggU8t6g">
 <div class="absolute inset-0 bg-black/10 z-0"></div>
 <div class="absolute inset-0 flex items-end justify-center pb-24 z-20">
 <h2 class="font-heading-uppercase text-[32px] md:text-[64px] tracking-[0.4em] text-white drop-shadow-xl gold-text text-center font-bold">¡NOS CASAMOS!</h2>
@@ -558,11 +530,11 @@ END:VCALENDAR`;
 </div>
 </div>
 <div class="flex flex-col md:flex-row justify-center gap-4">
-<a class="font-button-text text-button-text text-on-surface border border-outline-variant px-6 py-3 flex items-center justify-center gap-2 hover:bg-primary hover:text-on-primary hover:border-primary transition-all duration-300 bg-surface rounded-full shadow-sm hover:shadow-md" href="https://calendar.google.com/calendar/render?action=TEMPLATE&amp;text=Boda+Brenda+%26+Jos%C3%A9&amp;dates=20261122T210000Z/20261123T060000Z&amp;details=Ceremonia+y+Fiesta&amp;location=Darwin+Tortugas" rel="noopener noreferrer" target="_blank">
+<a class="font-button-text text-button-text text-on-surface border border-outline-variant px-6 py-3 flex items-center justify-center gap-2 hover:bg-primary hover:text-on-primary hover:border-primary transition-all duration-300 bg-surface rounded-full shadow-sm hover:shadow-md" href="https://calendar.google.com/calendar/render?action=TEMPLATE&amp;text=Boda+Brenda+%26+Jos%C3%A9&amp;dates=20261122T210000Z/20261123T060000Z&amp;details=Ceremonia+y+Fiesta&amp;location=Darwin+Tortugas" target="_blank">
 <span class="material-symbols-outlined text-[18px]" data-icon="calendar_today">calendar_today</span>
                          Agendar en Google Calendar
                      </a>
-<button class="font-button-text text-button-text text-on-surface border border-outline-variant px-6 py-3 flex items-center justify-center gap-2 hover:bg-primary hover:text-on-primary hover:border-primary transition-all duration-300 bg-surface rounded-full shadow-sm hover:shadow-md" onclick="downloadICS(event)">
+<button class="font-button-text text-button-text text-on-surface border border-outline-variant px-6 py-3 flex items-center justify-center gap-2 hover:bg-primary hover:text-on-primary hover:border-primary transition-all duration-300 bg-surface rounded-full shadow-sm hover:shadow-md" onclick="downloadICS()">
 <span class="material-symbols-outlined text-[18px]" data-icon="event">event</span>
                          Apple / Outlook (.ics)
                      </button>
@@ -582,7 +554,7 @@ END:VCALENDAR`;
 <div class="bg-surface border border-secondary/20 p-6 md:p-12 shadow-lg flex flex-col md:flex-row gap-8 md:gap-16 items-center">
 <div class="w-full md:w-1/2">
 <div class="p-2 border border-outline-variant/30 bg-surface-container-lowest">
-<img class="w-full h-auto grayscale opacity-90 sepia-[.2]" data-alt="A detailed black and white sketch of a modern, low-profile event venue building with palm trees and a weeping willow, elegant architectural drawing style, fine lines on a cream background." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAvuUSUgdteWX-QBdclQGQES2pTPHPEceTaqAsh2gTQAfOwytCyT3FXV4Ixcd4arMOlRXu7nRaPjEnBDfvJ6vG3G9ST3ZRYVq9G2vQy4KgqE0F_won38rmlJjT_guCnZ-qOjdG84StGSErNKGjid0gXhQWHUDSrApkRPj9eooOIa31CBHswQw4Sh-tpnW4kssOwLfAM9wY_6cJaanhQPheEIzdAxCzfoUyy64AymeVfLP-j9NuIBXYGm0H1VHtFXCQ-rA"/>
+<img class="w-full h-auto grayscale opacity-90 sepia-[.2]" data-alt="A detailed black and white sketch of a modern, low-profile event venue building with palm trees and a weeping willow, elegant architectural drawing style, fine lines on a cream background." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAvuUSUgdteWX-QBdclQGQES2pTPHPEceTaqAsh2gTQAfOwytCyT3FXV4Ixcd4arMOlRXu7nRaPjEnBDfvJ6vG3G9ST3ZRYVq9G2vQy4KgqE0F_won38rmlJjT_guCnZ-qOjdG84StGSErNKGjid0gXhQWHUDSrApkRPj9eooOIa31CBHswQw4Sh-tpnW4kssOwLfAM9wY_6cJaanhQPheEIzdAxCzfoUyy64AymeVfLP-j9NuIBXYGm0H1VHtFXCQ-rA">
 </div>
 </div>
 <div class="w-full md:w-1/2 flex flex-col gap-6">
@@ -619,12 +591,12 @@ END:VCALENDAR`;
 </button>
 <h3 class="font-section-title text-[28px] text-on-surface mb-6 text-center">Abrir en...</h3>
 <div class="flex flex-col gap-4">
-<a class="font-button-text text-button-text text-on-surface border border-outline-variant px-6 py-4 flex items-center justify-center gap-3 hover:bg-surface-variant hover:border-secondary transition-all rounded-full group" href="#" onclick="openDeepLink(event, 'waze://?ll=-34.4716,-58.6325&amp;navigate=yes', 'https://waze.com/ul?ll=-34.4716,-58.6325&amp;navigate=yes')">
-<img alt="Waze" class="w-6 h-6 object-contain" src="https://lh3.googleusercontent.com/aida-public/AB6AXuD2s0CRpw1T0u9KrAI6YkvzQy7WooX2azpkBldg7s4xR8z5GOvLV3n4gDNc4BHlj5rSL3X0PkMgexllg_waEkYBNVdTgH2LROXQg57ossEeYkfSe9x7LgiWNCNMU7TcPwnmwAJjqXMCZQFgsPjtF9KKzvdHkPPahjwwjTz795tmE-BbMwmi3ucC6QxeWvpwVxXUbqfsRBziw-myVb3SomXc0prSRwmVTy8otAoDI2l1YVrXa-BSPxvwPzeLNzYae7q8aw"/>
+<a class="font-button-text text-button-text text-on-surface border border-outline-variant px-6 py-4 flex items-center justify-center gap-3 hover:bg-surface-variant hover:border-secondary transition-all rounded-full group" href="https://ul.waze.com/ul?place=ChIJh17g1zaZvJUR6YxIIz1htkY&amp;ll=-34.45444930%2C-58.76231410&amp;navigate=yes&amp;utm_campaign=default&amp;utm_source=waze_website&amp;utm_medium=lm_share_location" target="_blank">
+<img alt="Waze" class="w-6 h-6 object-contain" src="https://lh3.googleusercontent.com/aida-public/AB6AXuD2s0CRpw1T0u9KrAI6YkvzQy7WooX2azpkBldg7s4xR8z5GOvLV3n4gDNc4BHlj5rSL3X0PkMgexllg_waEkYBNVdTgH2LROXQg57ossEeYkfSe9x7LgiWNCNMU7TcPwnmwAJjqXMCZQFgsPjtF9KKzvdHkPPahjwwjTz795tmE-BbMwmi3ucC6QxeWvpwVxXUbqfsRBziw-myVb3SomXc0prSRwmVTy8otAoDI2l1YVrXa-BSPxvwPzeLNzYae7q8aw">
                         Waze
                     </a>
-<a class="font-button-text text-button-text text-on-surface border border-outline-variant px-6 py-4 flex items-center justify-center gap-3 hover:bg-surface-variant hover:border-secondary transition-all rounded-full group" href="#" onclick="openDeepLink(event, 'comgooglemaps://?daddr=-34.4716,-58.6325&amp;directionsmode=driving', 'https://www.google.com/maps/dir/?api=1&amp;destination=-34.4716,-58.6325')">
-<img alt="Google Maps" class="w-6 h-6 object-contain" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBEkXaj8c-AEP8ekLmHmt_QQ5rbEXbLktEko6G6A4-ewHXy1w3vG6husrFrvr48bXJfhRQd7aeCfnHdIHkUeY0GATkCmm5kvPpAMkt8MIJ7GbStHwTBUekUC54K28u_RZ-hivQ_PzYWUzTsW1IdUTVsji6Uja82tefXFCpiAu5htsuIa22yvYGvwBJFMDlZ1w6tdSLxP8273mfG_o6z8bcbOYNZWYW0f0kevR2ytdzEh5JCFXnCFgxfuS-uzolxURsuuQ"/>
+<a class="font-button-text text-button-text text-on-surface border border-outline-variant px-6 py-4 flex items-center justify-center gap-3 hover:bg-surface-variant hover:border-secondary transition-all rounded-full group" href="https://www.google.com/maps/search/?api=1&amp;query=Darwin+Tortugas" target="_blank">
+<img alt="Google Maps" class="w-6 h-6 object-contain" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBEkXaj8c-AEP8ekLmHmt_QQ5rbEXbLktEko6G6A4-ewHXy1w3vG6husrFrvr48bXJfhRQd7aeCfnHdIHkUeY0GATkCmm5kvPpAMkt8MIJ7GbStHwTBUekUC54K28u_RZ-hivQ_PzYWUzTsW1IdUTVsji6Uja82tefXFCpiAu5htsuIa22yvYGvwBJFMDlZ1w6tdSLxP8273mfG_o6z8bcbOYNZWYW0f0kevR2ytdzEh5JCFXnCFgxfuS-uzolxURsuuQ">
                         Google Maps
                     </a>
 </div>
@@ -637,11 +609,11 @@ END:VCALENDAR`;
 </div>
 <div class="max-w-5xl mx-auto flex flex-col md:flex-row items-center gap-12 md:gap-24 flex-col md:flex-row-reverse">
 <div class="w-full md:w-1/2 text-center md:text-left flex flex-col gap-6 order-1 md:order-2">
-<p class="font-heading-uppercase text-heading-uppercase text-primary tracking-[0.3em] md:hidden">Código de Vestimenta:<br/> Elegante Formal</p>
-<p class="font-heading-uppercase text-heading-uppercase text-primary tracking-[0.3em] hidden md:block">Código de Vestimenta:<br/> Elegante Formal</p>
+<p class="font-heading-uppercase text-heading-uppercase text-primary tracking-[0.3em] md:hidden">Código de Vestimenta:<br> Elegante Formal</p>
+<p class="font-heading-uppercase text-heading-uppercase text-primary tracking-[0.3em] hidden md:block">Código de Vestimenta:<br> Elegante Formal</p>
 <p class="font-body-main text-body-main text-on-surface-variant leading-relaxed">
                         Deseamos que te sientas espectacular. La noche amerita brillo y distinción.
-                        <br/><br/>
+                        <br><br>
 <strong class="text-primary">Nota con cariño:</strong> Rogamos reservar los tonos blancos y marfil exclusivamente para la novia.
                     </p>
 <div class="pl-6 border-l-2 border-secondary/50 mt-6 text-left">
@@ -651,7 +623,7 @@ END:VCALENDAR`;
 </div>
 <div class="w-full md:w-1/2 relative order-2 md:order-1">
 <div class="absolute -inset-4 border border-secondary/30 rounded-t-full"></div>
-<img class="w-full h-auto rounded-t-full object-cover aspect-[4/5] shadow-xl" data-alt="Close up of a classic black tuxedo with a crisp white shirt, a black bow tie, and a white rose boutonniere, resting elegantly next to a small jewelry box holding gold rings, luxurious satin fabric background, dramatic lighting, high fashion editorial style." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDM90Jdcdw7KaJJi1O71G6a3Dbybxp8ohHAiKOtTrOiKOTyAgj8kfSU0lhZzmxzNKv5UtcU1wSvcB_QUN-QXFDqE7_3Fy42vFYpCF6_voVmUExqax7gxZ59xrtwX2Y7apWW28PixBCU7YhwhgRu8cTlrNG8vTDUsiArmcO3h6CmbqmKDOlFvDku6La2A1M4YMYIwZa_9h_MhDvGkaP9pXeaAi3s9p5bTnxegCWcw-Xlna2P34qgcCNpiSbn2gGENR2A-w"/>
+<img class="w-full h-auto rounded-t-full object-cover aspect-[4/5] shadow-xl" data-alt="Close up of a classic black tuxedo with a crisp white shirt, a black bow tie, and a white rose boutonniere, resting elegantly next to a small jewelry box holding gold rings, luxurious satin fabric background, dramatic lighting, high fashion editorial style." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDM90Jdcdw7KaJJi1O71G6a3Dbybxp8ohHAiKOtTrOiKOTyAgj8kfSU0lhZzmxzNKv5UtcU1wSvcB_QUN-QXFDqE7_3Fy42vFYpCF6_voVmUExqax7gxZ59xrtwX2Y7apWW28PixBCU7YhwhgRu8cTlrNG8vTDUsiArmcO3h6CmbqmKDOlFvDku6La2A1M4YMYIwZa_9h_MhDvGkaP9pXeaAi3s9p5bTnxegCWcw-Xlna2P34qgcCNpiSbn2gGENR2A-w">
 </div>
 </div>
 </section>
@@ -739,14 +711,16 @@ END:VCALENDAR`;
 </div>
 <p class="font-heading-uppercase text-heading-uppercase text-primary mb-4 tracking-[0.2em]">Nuestra Música</p>
 <p class="font-body-main text-body-main text-on-surface-variant mb-8 max-w-lg mx-auto">
-                    Ayúdanos a crear la banda sonora perfecta para nuestra celebración.<br/>
+                    Ayúdanos a crear la banda sonora perfecta para nuestra celebración.<br>
 <span class="italic">"La alegría compartida es doble alegría."</span>
 </p>
 <div class="w-full max-w-2xl mx-auto bg-[#181818] rounded-xl overflow-hidden shadow-2xl">
 <div class="flex flex-col md:flex-row p-4">
 <!-- Album Art Mosaic -->
+
 <!-- Tracklist & Controls -->
 <div class="flex-grow flex flex-col justify-between md:pl-4 text-left relative">
+
 <div class="space-y-3 mt-2 md:mt-0"><div class="flex items-center justify-between text-[#B3B3B3] text-sm border-b border-white/10 pb-2"><div class="flex items-center"><span class="w-6 text-center font-mono">01</span><span class="text-white font-medium ml-2">Can't Help Falling In Love With You</span></div><span class="text-[10px] opacity-60">TWOPILOTS</span></div><div class="flex items-center justify-between text-[#B3B3B3] text-sm pt-1"><div class="flex items-center"><span class="w-6 text-center font-mono">02</span><span class="text-white font-medium ml-2">BIRDS OF A FEATHER</span></div><span class="text-[10px] opacity-60">BILLIE EILISH</span></div></div>
 <div class="mt-6 flex flex-col md:flex-row justify-between items-start md:items-end gap-4">
 <div>
@@ -756,7 +730,7 @@ END:VCALENDAR`;
 <div class="flex items-center gap-3 text-white">
 <span class="material-symbols-outlined text-[24px] text-[#B3B3B3] hover:text-white cursor-pointer" data-icon="skip_previous">skip_previous</span>
 <span class="material-symbols-outlined text-[24px] text-[#B3B3B3] hover:text-white cursor-pointer" data-icon="skip_next">skip_next</span>
-<a class="w-8 h-8 bg-[#1DB954] rounded-full flex items-center justify-center cursor-pointer ml-2 hover:scale-105 transition-transform" href="#" onclick="openDeepLink(event, 'spotify:playlist:0p9MSDugf3YnzCZ3OiAEcl', 'https://open.spotify.com/playlist/0p9MSDugf3YnzCZ3OiAEcl')">
+<a class="w-8 h-8 bg-[#1DB954] rounded-full flex items-center justify-center cursor-pointer ml-2 hover:scale-105 transition-transform" href="https://open.spotify.com/playlist/0p9MSDugf3YnzCZ3OiAEcl?si=uo72eq2sRny4AsodJc7baQ" target="_blank">
 <span class="material-symbols-outlined text-[20px] text-black" data-icon="play_arrow">play_arrow</span>
 </a>
 </div>
@@ -764,7 +738,7 @@ END:VCALENDAR`;
 </div>
 </div>
 </div>
-<a class="mt-8 font-button-text text-button-text text-secondary border border-secondary px-6 py-3 uppercase hover:bg-secondary hover:text-on-secondary transition-colors duration-300 inline-flex justify-center items-center gap-2 rounded-full group" href="#" onclick="openDeepLink(event, 'spotify:playlist:0p9MSDugf3YnzCZ3OiAEcl', 'https://open.spotify.com/playlist/0p9MSDugf3YnzCZ3OiAEcl')">
+<a class="mt-8 font-button-text text-button-text text-secondary border border-secondary px-6 py-3 uppercase hover:bg-secondary hover:text-on-secondary transition-colors duration-300 inline-flex justify-center items-center gap-2 rounded-full group" href="https://open.spotify.com/playlist/0p9MSDugf3YnzCZ3OiAEcl?si=uo72eq2sRny4AsodJc7baQ" target="_blank">
 <span class="material-symbols-outlined text-[18px]" data-icon="library_music">library_music</span>
                 Escuchar en Spotify
             </a>
@@ -794,4 +768,8 @@ END:VCALENDAR`;
             22.11.2026 • BUENOS AIRES
         </div>
 </footer>
+
+
+
+
 </body></html>
